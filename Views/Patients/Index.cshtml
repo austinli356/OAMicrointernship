@@ -1,0 +1,301 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+}
+<h3 id="hospitalName"></h3>
+<table id="patientsTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <input type="text" id="name" placeholder="Name" class="filter"></input>
+            </th>
+            <th>
+                <span>Age</span>
+     
+                <div id="slider">
+
+                    <div id="slidertrack">
+                        <span id="min">0</span>
+                        <span id="max">120</span>
+                        <div class="progress"></div>
+                    </div>
+         
+                    <div class="range-input">
+                        <input type="range" class="range-min" min="0" max="120" value="0">
+                        <input type="range" class="range-max" min="0" max="120" value="120">
+                    </div>
+                </div>
+                <svg id="toggle" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                </svg>
+    
+            </th>
+            <th>
+                <input type="text" id="address" placeholder="Patient Address" class="filter"></input>
+            </th>
+            <th>
+                <input type="text" id="hospital" placeholder="Hospital" class="filter"></input>
+            </th>
+            <th>
+                Transaction Count
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be populated here using JavaScript -->
+    </tbody>
+</table>
+<span id="pageInfo" class="mr-2">Page <span id="currentPage">1</span> of <span id="totalPages">?</span></span>
+
+<ul class="pagination">
+    <li class="page-item">
+        <button class="page-link" id="firstPage">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+            </svg>
+        </button>
+    </li>
+
+    <li class="page-item">
+        <button class="page-link" id="prevPage">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+            </svg>
+        </button>
+    </li>
+
+    <li class="page-item">
+        <button class="page-link" id="nextPage">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+            </svg>
+        </button>
+    </li>
+
+    <li class="page-item">
+        <button class="page-link" id="lastPage">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708" />
+                <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708" />
+            </svg>
+        </button>
+    </li>
+
+    <li class="page-item ms-5">
+        <input type="number" class="form-control form-control-color" id="page-input" title="Input a Page" placeholder="#" style="cursor: text;">
+    </li>
+
+    <li class="page-item">
+        <button type="submit" id="submitButton" class="btn btn-primary ms-1">GO</button>
+    </li>
+
+</ul>
+
+
+
+
+<script>
+
+    @*----------------------Event Listeners and Interactivity---------------------- *@
+    
+    //
+    document.addEventListener("DOMContentLoaded", function () {
+
+        //set up initial page parameters and load it
+        let currentPage = 1;
+        const pageSize = 10;
+        loadPage(currentPage);
+
+        //assign event listeners and other functionality
+        var inputs = Array.from(document.getElementsByClassName('filter'));
+        inputs.forEach(input => {
+            input.addEventListener('keyup', function () {
+                loadPage(currentPage);
+            });
+        });
+        document.getElementById('nextPage').addEventListener('click', function () {
+            currentPage++;
+            loadPage(currentPage);
+        });
+
+        document.getElementById('lastPage').addEventListener('click', function () {
+            currentPage = totalPages.innerHTML
+            loadPage(currentPage);
+            console.log(totalPages)
+        });
+
+        document.getElementById('firstPage').addEventListener('click', function () {
+            currentPage = 1;
+            loadPage(currentPage);
+        });
+
+        document.getElementById('prevPage').addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                loadPage(currentPage);
+            }
+        });
+        document.getElementById('page-input').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                let page = document.getElementById('page-input').value;
+                if (page > 0 && page <= parseInt(totalPages.innerHTML)) {
+                    currentPage = page;
+                }
+                loadPage(currentPage);
+            }
+        });
+
+        document.getElementById('submitButton').addEventListener('click', function () {
+            let page = document.getElementById('page-input').value;
+            if (page > 0 && page <= parseInt(totalPages.innerHTML)) {
+                currentPage = page;
+            }
+            loadPage(currentPage);
+        });
+
+        document.getElementById('name').addEventListener('keypress', function (e) {
+            loadPage(currentPage)
+        });
+
+        document.getElementById('address').addEventListener('keypress', function (e) {
+            loadPage(currentPage)
+        });
+
+        document.getElementById('hospital').addEventListener('keypress', function (e) {
+            loadPage(currentPage)
+        });
+
+
+        //slider logic
+        document.getElementById('toggle').addEventListener('click', function () {
+            if (document.getElementById('slider').style.display === 'none') {
+                document.getElementById('slider').style.display = 'inline-block'
+                document.getElementById('toggle').style.transform = 'rotate(45deg)';
+            }
+            else {
+                document.getElementById('slider').style.display = 'none';
+                document.getElementById('toggle').style.transform = '';
+            }
+        });
+        var sliderInputs = document.querySelectorAll(".range-input input");
+        var values = document.querySelectorAll("#slidertrack span");
+        var progress = document.querySelector("#slidertrack .progress");
+        var min, max;
+        sliderInputs.forEach(input => {
+            input.addEventListener("input", function () {
+                if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)){
+                    min = sliderInputs[1];
+                    max = sliderInputs[0];
+                }
+                else{
+                    min = sliderInputs[0];
+                    max = sliderInputs[1];
+                }
+                progress.style.left = (parseInt(min.value) / min.max) * 100 + "%";
+                progress.style.right = 100 - (parseInt(max.value) / min.max) * 100 + "%";
+
+                values[0].innerHTML = sliderInputs[0].value
+                values[1].innerHTML = sliderInputs[1].value
+                values[0].style.left = (parseInt(sliderInputs[0].value) / sliderInputs[0].max) * 100 -6+ "%";
+                values[1].style.right = 100 - (parseInt(sliderInputs[1].value) / sliderInputs[0].max) * 100-6 + "%";
+            })
+            input.addEventListener("mouseup", function() {
+                loadPage(currentPage);  
+            })
+        });
+       
+    });
+
+
+    @* <----------------------Paging/Tabling Logic and Fetching Data----------------------> *@
+
+
+    //Set up query parameters, make fetch statement and call populateTable function
+    function loadPage(pageIndex) {
+        // document.getElementById('spinner').style.display = 'block';
+
+        //Get hospital Id string from query string
+        const searchParams = new URLSearchParams(window.location.search);
+        var hospitalId = searchParams.get('hospitalId');
+
+        //Setting query parameters from inputted values
+        var sliderInputs = document.querySelectorAll(".range-input input");
+        var url = `/patients/GetPatients?pageIndex=${pageIndex}&pageSize=10`;
+        if (hospitalId) {
+            url += '&hospitalId=' + hospitalId;
+        }
+
+        if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)) {
+            var max = sliderInputs[0].value;
+            var min = sliderInputs[1].value;
+        }
+        else {
+            var max = sliderInputs[1].value;
+            var min = sliderInputs[0].value;
+        }
+        console.log(max, min);
+        url +=
+            '&name=' + document.getElementById('name').value +
+            '&address=' + document.getElementById('address').value +
+            '&hospital=' + document.getElementById('hospital').value +
+            '&min=' + min +
+            '&max=' + max;
+
+        //fetch statement
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                populateTable(data, hospitalId);
+                updatePagingControls(pageIndex, data.totalRecords);
+                //document.getElementById('spinner').style.display = 'none';
+            })
+            .catch(error => console.error('Unable to get patient data.', error));
+    }
+
+
+    //take data from fetch and format it into rows/columns
+    function populateTable(data, hospitalId) {
+        const tableBody = document.getElementById('patientsTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = ''; // Clear the table body
+
+        //Displays to webpage whether the table is filtered or unfiltered
+        var hospitalName = 'All Hospitals';
+        if (hospitalId) {
+            hospitalName = data.hospitalName;
+        }
+        document.getElementById('hospitalName').innerText = 'Patients In ' + hospitalName;
+        // Iterate through the data and append rows to the table body
+        data.data.forEach(patient => {
+            let row = tableBody.insertRow();
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+            let cell5 = row.insertCell(4);
+
+
+            cell1.innerHTML = patient.firstName + ' ' + patient.lastName;
+            cell2.innerHTML = patient.age;
+            cell3.innerHTML = patient.patientAddress;
+            cell4.innerHTML = patient.hospitalName;
+            cell5.innerHTML = '<a href="/MedicalTransactions/Index' + '?patientId=' + patient.id + '">' + patient.transactionCount + '</a>';
+        });
+    }
+
+    //update page in accordance to the query made
+    function updatePagingControls(currentPage, totalCount) {
+        const pageSize = 10;
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        document.getElementById('currentPage').textContent = currentPage;
+        document.getElementById('totalPages').textContent = totalPages;
+
+        document.getElementById('prevPage').disabled = currentPage <= 1;
+        document.getElementById('nextPage').disabled = currentPage >= totalPages;
+
+    }
+</script>

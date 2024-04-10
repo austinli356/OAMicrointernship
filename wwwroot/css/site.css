@@ -1,0 +1,110 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+input {
+    font-weight: bold;
+    font-style: italic;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+th input{
+    border: none;
+}
+
+th input:focus {
+    outline: none;
+}
+
+::placeholder{
+    color: black;
+    font-weight:bold;
+    opacity: 1;
+    font-style: normal;
+}
+
+input:focus::placeholder {
+    color: transparent;
+}
+
+#slider{
+    display:none;
+}
+#slidertrack {
+    margin-left:10px;
+    height: 5px;
+    position: relative;
+    background: #ddd;
+    border-radius:5px;
+    width: 150px;
+}
+
+#min {
+    left: -8px;
+    position: absolute;
+    top: -25px;
+}
+
+#max{
+    right: -8px;
+    position: absolute;
+    top: -25px;
+}
+
+.progress{
+    height: 5px;
+    background: #aaa;
+    left: 0%;
+    right: 0%;
+    position: absolute;
+}
+
+.range-input{
+    position: relative;
+    
+}
+
+.range-input input{
+    position: absolute;
+    height: 5px;
+    top: -5px;
+    width: 100%;
+    -webkit-appearance: none;
+    background: none;
+    pointer-events: none;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+    pointer-events: auto;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    -webkit-appearance: none;
+    background: #444;
+
+}
