@@ -106,58 +106,34 @@
     <li class="page-item">
         <button type="submit" id="submitButton"class="btn btn-primary ms-1">GO</button>
     </li>
+
+    <li class="page-item">
+        <button type="submit" id="resetButton" class="btn btn-danger ms-1">RESET</button>
+    </li>
        
   
 </ul>
 </nav>
+
+@* <--------------------JavaScript--------------------> *@
 <script>
+    //global
     var currentPage = 1;
     document.addEventListener("DOMContentLoaded", function () {
         
-       
+        //intialization and first page load
         const pageSize = 10;
         var sliderInputs = document.querySelectorAll(".range-input input");
         var values = document.querySelectorAll("#slidertrack span");
         var progress = document.querySelector("#slidertrack .progress");
         var min, max;
         var dates = document.querySelectorAll(".date");
-
         document.getElementById('end').valueAsDate = new Date();
-
         loadPage(currentPage);
-        document.getElementById('nextPage').addEventListener('click', function () {
-            currentPage++;
-            loadPage(currentPage);
-        });
 
-        document.getElementById('lastPage').addEventListener('click', function () {
-            currentPage = totalPages.innerHTML
-            loadPage(currentPage);
+        //<--------------------Input/Button Functionality-------------------->// 
 
-        });
-
-        document.getElementById('firstPage').addEventListener('click', function () {
-            currentPage = 1;
-            loadPage(currentPage);
-        });
-
-        document.getElementById('prevPage').addEventListener('click', function () {
-            if (currentPage > 1) {
-                currentPage--;
-                loadPage(currentPage);
-            }
-        });
-
-        document.getElementById('page-input').addEventListener('keypress', function (e) {
-            if (e.key === "Enter"){
-                let page = document.getElementById('page-input').value;
-                if (page > 0 && page <= parseInt(totalPages.innerHTML)) {
-                    currentPage = page;
-                }
-                loadPage(currentPage);
-            }
-        });
-
+        //input forms functionality
         document.getElementById('submitButton').addEventListener('click', function () {
             let page = document.getElementById('page-input').value;
             if (page > 0 && page <= parseInt(totalPages.innerHTML)) {
@@ -189,14 +165,16 @@
             }
         });
         
+        //reload page when date forms recieve input
         dates.forEach(date => {
             date.addEventListener("input", function () {
-                console.log(1)
                 loadPage(currentPage);
             });
         });
 
+        //toggle buttons functionality
         document.getElementById('toggle').addEventListener('click', function () {
+            //update display in accordance to toggle state
             if (document.getElementById('slider').style.display === 'none') {
                 document.getElementById('slider').style.display = 'inline-block'
                 document.getElementById('toggle').style.transform = 'rotate(45deg)';
@@ -210,6 +188,7 @@
         });
 
         document.getElementById('datetoggle').addEventListener('click', function () {
+            //update display in accordance to toggle state
             let header = document.querySelectorAll(this.parentElement.nodeName + " span")[3];
             if (document.getElementById('datepicker').style.display === 'none') {
                 document.getElementById('datepicker').style.display = 'inline-block'
@@ -222,9 +201,11 @@
                 header.style.display = 'inline';
             }
         });
-
+        
+        //slider functionality
         sliderInputs.forEach(input => {
             input.addEventListener("input", function () {
+                //set min and max to whichever slider has to smaller/bigger value
                 if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)) {
                     min = sliderInputs[1];
                     max = sliderInputs[0];
@@ -233,36 +214,81 @@
                     min = sliderInputs[0];
                     max = sliderInputs[1];
                 }
+
+                //format custom progress bar in accordance to sliderInputs
                 progress.style.left = (parseInt(min.value) / min.max) * 100 + "%";
                 progress.style.right = 100 - (parseInt(max.value) / min.max) * 100 + "%";
 
-
+                //update values to follow slider knob and display its value
                 values[0].innerHTML = sliderInputs[0].value/1000 + "K"
                 values[1].innerHTML = sliderInputs[1].value/1000 + "K"
                 values[0].style.left = (parseInt(sliderInputs[0].value) / sliderInputs[0].max) * 100 - 6 + "%";
                 values[1].style.right = 100 - (parseInt(sliderInputs[1].value) / sliderInputs[0].max) * 100 - 6 + "%";
             })
+
+            //trigger pageload once dragging is complete
             input.addEventListener("mouseup", function () {
-                console.log(currentPage);
                 loadPage(currentPage);
             })
         });
+
+        //paging buttons functionality
+        document.getElementById('patientfirst').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+        document.getElementById('patientlast').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+        document.getElementById('doctor').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+        document.getElementById('nurse').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+
+        //reset button
+        document.getElementById("resetButton").addEventListener('click', function () {
+            document.querySelectorAll("input").forEach(input => {
+                input.value = input.defaultValue;
+            });
+            let event = new Event("input");
+            sliderInputs.forEach(slider => {
+                slider.dispatchEvent(event);
+            });
+            dates.forEach(date => {
+                date.dispatchEvent(event);
+            });
+            currentPage=1;
+            loadPage(currentPage);
+
+        }); 
     });
 
+
+    //<--------------------Displaying Data to Table-------------------->//
     function loadPage(pageIndex) {
         // document.getElementById('spinner').style.display = 'block';
 
-        //Get patientId from query string
+        //set up url
         const searchParams = new URLSearchParams(window.location.search);
         var patientId = searchParams.get('patientId');
-
-        var sliderInputs = document.querySelectorAll(".range-input input");
         var url = `/medicalTransactions/GetMedicalTransactions?pageIndex=${pageIndex}&pageSize=10`;
+        var sliderInputs = document.querySelectorAll(".range-input input");
 
+        //check for cross tabling
         if (patientId) {
             url += '&patientId=' + patientId;
         }
 
+        //set minimum and maximum based off slider inputs
         if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)) {
             var max = sliderInputs[0].value;
             var min = sliderInputs[1].value;
@@ -271,6 +297,8 @@
             var max = sliderInputs[1].value;
             var min = sliderInputs[0].value;
         }
+
+        //create url based off input values
         url +=
             '&firstname=' + document.getElementById('patientfirst').value +
             '&lastname=' + document.getElementById('patientlast').value +
@@ -281,17 +309,20 @@
             '&start=' + document.getElementById('start').value +
             '&end=' + document.getElementById('end').value;
         
-        console.log(url)
+        //fetch
         fetch(url)
             .then(response => response.json())
             .then(data => {
 
+                //create special state for when nothing passes query
                 if (Math.ceil(data.totalRecords / 10) == 0) {
+                    //create special state for when nothing passes query
                     document.getElementById('patientName').innerHTML = 'NO RECORDS'
                     document.getElementById('medicalTransactionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
                     pageIndex = 0;
                     updatePagingControls(pageIndex, data.totalRecords);
                 }
+                //check/correct: current page being greater than total page count
                 else if (pageIndex > Math.ceil(data.totalRecords / 10)) {
                     currentPage = Math.ceil(data.totalRecords / 10);
                     console.log(currentPage)
@@ -299,6 +330,7 @@
 
 
                 }
+                //default action
                 else {
                     populateTable(data, patientId);
                     updatePagingControls(pageIndex, data.totalRecords);
@@ -308,6 +340,8 @@
             .catch(error => console.error('Unable to get medical transactions data.', error));
     
     }
+
+    //update webpage to display proper paging
     function updatePagingControls(currentPage, totalCount) {
         const pageSize = 10;
         const totalPages = Math.ceil(totalCount / pageSize);
@@ -315,17 +349,19 @@
         document.getElementById('currentPage').textContent = currentPage;
         document.getElementById('totalPages').textContent = totalPages;
 
+        //set disabled states
         document.getElementById('prevPage').disabled = currentPage <= 1;
         document.getElementById('nextPage').disabled = currentPage >= totalPages;
         document.getElementById('firstPage').disabled = currentPage <= 1;
         document.getElementById('lastPage').disabled = currentPage >= totalPages;
     }
 
+    //create html from data and add it as rows to table 
     function populateTable(data, patientId) {
         const tableBody = document.getElementById('medicalTransactionsTable').getElementsByTagName('tbody')[0];
         tableBody.innerHTML = ''; // Clear the table body
 
-        //Display to webpage whether medical transactions is filtered or not
+        //Display to webpage whether medical transactions is filtered to a specific patient
         var patientName = 'All Patients';
         if (patientId) {
             patientName = data.patientName;

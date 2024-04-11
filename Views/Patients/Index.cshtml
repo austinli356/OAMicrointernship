@@ -93,13 +93,16 @@
         <button type="submit" id="submitButton" class="btn btn-primary ms-1">GO</button>
     </li>
 
+    <li class="page-item">
+        <button type="submit" id="resetButton" class="btn btn-danger ms-1">RESET</button>
+    </li>
 </ul>
 
 
 
 
 <script>
-   var currentPage = 1;
+   var currentPage = 1;//global
     @*----------------------Event Listeners and Interactivity---------------------- *@
     
     //
@@ -209,7 +212,20 @@
             })
         });
        
-    });
+        //reset button
+            document.getElementById("resetButton").addEventListener('click', function () {
+                document.querySelectorAll("input").forEach(input => {
+                    input.value = input.defaultValue;
+                });
+                let event = new Event("input");
+                sliderInputs.forEach(slider => {
+                    slider.dispatchEvent(event);
+                });
+                currentPage = 1;
+                loadPage(currentPage);
+
+            });
+        });
 
 
     @* <----------------------Paging/Tabling Logic and Fetching Data----------------------> *@

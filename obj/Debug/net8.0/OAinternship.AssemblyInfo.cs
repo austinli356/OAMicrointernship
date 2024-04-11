@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OAinternship")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4cd5533e3d93161b8b8a914da97e0a4d859bb48")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57b5656779c53c3acb4210b293a62a74b82340d8")]
 [assembly: System.Reflection.AssemblyProductAttribute("OAinternship")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OAinternship")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

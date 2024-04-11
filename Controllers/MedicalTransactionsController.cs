@@ -22,6 +22,7 @@ namespace OAinternship.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<VMedicalTransaction>> GetMedicalTransactions(int pageIndex = 0, int pageSize = 10, int? patientId = null, string firstname = "", string lastname = "", int max = 100000, int min = 0, string nurse = "", string doctor = "", string start = "2000-01-01", string end = "3000-01-01")
         {
+            
             DateOnly startDate = DateOnly.ParseExact(start, "yyyy-MM-dd");
             DateOnly endDate = DateOnly.ParseExact(end, "yyyy-MM-dd");
             var patientName = "";
