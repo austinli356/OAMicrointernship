@@ -115,15 +115,52 @@
         var values = document.querySelectorAll("#slidertrack span");
         var progress = document.querySelector("#slidertrack .progress");
         var min, max;
+        var inputs = Array.from(document.getElementsByClassName('filter'));
         loadPage(currentPage);
 
-        //assign event listeners and other functionality
-        var inputs = Array.from(document.getElementsByClassName('filter'));
+        //reload page when forms recieve inputs
         inputs.forEach(input => {
             input.addEventListener('keyup', function () {
                 loadPage(currentPage);
             });
         });
+
+        //slider logic
+        document.getElementById('toggle').addEventListener('click', function () {
+            if (document.getElementById('slider').style.display === 'none') {
+                document.getElementById('slider').style.display = 'inline-block'
+                document.getElementById('toggle').style.transform = 'rotate(45deg)';
+            }
+            else {
+                document.getElementById('slider').style.display = 'none';
+                document.getElementById('toggle').style.transform = '';
+            }
+        });
+
+        sliderInputs.forEach(input => {
+            input.addEventListener("input", function () {
+                if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)) {
+                    min = sliderInputs[1];
+                    max = sliderInputs[0];
+                }
+                else {
+                    min = sliderInputs[0];
+                    max = sliderInputs[1];
+                }
+                progress.style.left = (parseInt(min.value) / min.max) * 100 + "%";
+                progress.style.right = 100 - (parseInt(max.value) / min.max) * 100 + "%";
+
+                values[0].innerHTML = sliderInputs[0].value
+                values[1].innerHTML = sliderInputs[1].value
+                values[0].style.left = (parseInt(sliderInputs[0].value) / sliderInputs[0].max) * 100 - 6 + "%";
+                values[1].style.right = 100 - (parseInt(sliderInputs[1].value) / sliderInputs[0].max) * 100 - 6 + "%";
+            })
+            input.addEventListener("mouseup", function () {
+                loadPage(currentPage);
+            })
+        });
+
+        //paging functionality
         document.getElementById('nextPage').addEventListener('click', function () {
             currentPage++;
             loadPage(currentPage);
@@ -146,6 +183,7 @@
                 loadPage(currentPage);
             }
         });
+
         document.getElementById('page-input').addEventListener('keypress', function (e) {
             if (e.key === "Enter") {
                 let page = document.getElementById('page-input').value;
@@ -162,54 +200,6 @@
                 currentPage = page;
             }
             loadPage(currentPage);
-        });
-
-        document.getElementById('name').addEventListener('keypress', function (e) {
-            loadPage(currentPage)
-        });
-
-        document.getElementById('address').addEventListener('keypress', function (e) {
-            loadPage(currentPage)
-        });
-
-        document.getElementById('hospital').addEventListener('keypress', function (e) {
-            loadPage(currentPage)
-        });
-
-
-        //slider logic
-        document.getElementById('toggle').addEventListener('click', function () {
-            if (document.getElementById('slider').style.display === 'none') {
-                document.getElementById('slider').style.display = 'inline-block'
-                document.getElementById('toggle').style.transform = 'rotate(45deg)';
-            }
-            else {
-                document.getElementById('slider').style.display = 'none';
-                document.getElementById('toggle').style.transform = '';
-            }
-        });
-        
-        sliderInputs.forEach(input => {
-            input.addEventListener("input", function () {
-                if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)){
-                    min = sliderInputs[1];
-                    max = sliderInputs[0];
-                }
-                else{
-                    min = sliderInputs[0];
-                    max = sliderInputs[1];
-                }
-                progress.style.left = (parseInt(min.value) / min.max) * 100 + "%";
-                progress.style.right = 100 - (parseInt(max.value) / min.max) * 100 + "%";
-
-                values[0].innerHTML = sliderInputs[0].value
-                values[1].innerHTML = sliderInputs[1].value
-                values[0].style.left = (parseInt(sliderInputs[0].value) / sliderInputs[0].max) * 100 -6+ "%";
-                values[1].style.right = 100 - (parseInt(sliderInputs[1].value) / sliderInputs[0].max) * 100-6 + "%";
-            })
-            input.addEventListener("mouseup", function() {
-                loadPage(currentPage);  
-            })
         });
        
         //reset button
@@ -228,7 +218,7 @@
         });
 
 
-    @* <----------------------Paging/Tabling Logic and Fetching Data----------------------> *@
+    @* <----------------------Tabling Logic and Fetching Data----------------------> *@
 
 
     //Set up query parameters, make fetch statement and call populateTable function
