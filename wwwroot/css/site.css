@@ -61,19 +61,21 @@ input:focus::placeholder {
     position: relative;
     background: #ddd;
     border-radius:5px;
-    width: 150px;
+    width: 100px;
 }
 
 #min {
     left: -8px;
     position: absolute;
-    top: -25px;
+    top: 5px;
+    font-size:11px;
 }
 
-#max{
+#max {
     right: -8px;
     position: absolute;
-    top: -25px;
+    top: -20px;
+    font-size: 11px;
 }
 
 .progress{
@@ -108,3 +110,8 @@ input[type="range"]::-webkit-slider-thumb{
     background: #444;
 
 }
+
+input::-webkit-calendar-picker-indicator {
+    margin-left: -30px;
+}
+

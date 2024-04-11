@@ -99,15 +99,19 @@
 
 
 <script>
-
+   var currentPage = 1;
     @*----------------------Event Listeners and Interactivity---------------------- *@
     
     //
     document.addEventListener("DOMContentLoaded", function () {
 
         //set up initial page parameters and load it
-        let currentPage = 1;
+      
         const pageSize = 10;
+        var sliderInputs = document.querySelectorAll(".range-input input");
+        var values = document.querySelectorAll("#slidertrack span");
+        var progress = document.querySelector("#slidertrack .progress");
+        var min, max;
         loadPage(currentPage);
 
         //assign event listeners and other functionality
@@ -181,10 +185,7 @@
                 document.getElementById('toggle').style.transform = '';
             }
         });
-        var sliderInputs = document.querySelectorAll(".range-input input");
-        var values = document.querySelectorAll("#slidertrack span");
-        var progress = document.querySelector("#slidertrack .progress");
-        var min, max;
+        
         sliderInputs.forEach(input => {
             input.addEventListener("input", function () {
                 if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)){
@@ -237,7 +238,6 @@
             var max = sliderInputs[1].value;
             var min = sliderInputs[0].value;
         }
-        console.log(max, min);
         url +=
             '&name=' + document.getElementById('name').value +
             '&address=' + document.getElementById('address').value +
@@ -249,8 +249,23 @@
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                populateTable(data, hospitalId);
-                updatePagingControls(pageIndex, data.totalRecords);
+                    if (Math.ceil(data.totalRecords / 10) == 0) {
+                        document.getElementById('hospitalName').innerHTML = 'NO RECORDS'
+                        document.getElementById('patientsTable').getElementsByTagName('tbody')[0].innerHTML = '';
+                        pageIndex = 0;
+                        updatePagingControls(pageIndex, data.totalRecords);
+                    }
+                    else if (pageIndex > Math.ceil(data.totalRecords / 10)) {
+                        currentPage = Math.ceil(data.totalRecords / 10);
+                        loadPage(currentPage);
+
+
+                    }
+                    else {
+                        populateTable(data, hospitalId);
+                        updatePagingControls(pageIndex, data.totalRecords);
+                    }
+                
                 //document.getElementById('spinner').style.display = 'none';
             })
             .catch(error => console.error('Unable to get patient data.', error));
@@ -296,6 +311,7 @@
 
         document.getElementById('prevPage').disabled = currentPage <= 1;
         document.getElementById('nextPage').disabled = currentPage >= totalPages;
-
+        document.getElementById('firstPage').disabled = currentPage <= 1;
+        document.getElementById('lastPage').disabled = currentPage >= totalPages;
     }
 </script>

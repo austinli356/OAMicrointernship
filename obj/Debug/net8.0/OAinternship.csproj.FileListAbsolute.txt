@@ -150,3 +150,4 @@ C:\Users\itzyo\source\repos\OAinternship\OAinternship\obj\Debug\net8.0\refint\OA
 C:\Users\itzyo\source\repos\OAinternship\OAinternship\obj\Debug\net8.0\OAinternship.pdb
 C:\Users\itzyo\source\repos\OAinternship\OAinternship\obj\Debug\net8.0\OAinternship.genruntimeconfig.cache
 C:\Users\itzyo\source\repos\OAinternship\OAinternship\obj\Debug\net8.0\ref\OAinternship.dll
+C:\Users\itzyo\source\repos\OAinternship\OAinternship\obj\Debug\net8.0\OAinternship.sourcelink.json

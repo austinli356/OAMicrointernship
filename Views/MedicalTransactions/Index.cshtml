@@ -9,17 +9,51 @@
 @{
 
 }
-<h1 id="patientName"></h1>
+<h3 id="patientName"></h3>
 
 <table id="medicalTransactionsTable" class="table table-striped">
     <thead>
         <tr>
-            <th>Patient First</th>
-            <th>Patient Last</th>
-            <th>Total Cost</th>
-            <th>Date</th>
-            <th>Nurse</th>
-            <th>Doctor</th>
+            <th><input type="text" id="patientfirst" placeholder="Patient First" class="filter"></input></th>
+            <th><input type="text" id="patientlast" placeholder="Patient Last" class="filter"></input></th>
+            <th>
+                <span>Total Cost</span>
+
+                <div id="slider">
+
+                    <div id="slidertrack">
+                        <span id="min">0k</span>
+                        <span id="max">100k</span>
+                        <div class="progress"></div>
+                    </div>
+
+                    <div class="range-input">
+                        <input type="range" class="range-min" min="0" max="100000" value="0" step="1000">
+                        <input type="range" class="range-max" min="0" max="100000" value="100000" step="1000">
+                    </div>
+                </div>
+                <svg id="toggle" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                </svg>
+            </th>
+            <th>
+                <span>Date</span>
+                <span id="datepicker" style="display: none">
+                    <input type="date" id="start" value="2000-01-01" min="2000-01-01" class="date"/>
+                    <span> - </span>
+                    <input type="date" id="end" min="2000-01-01" class="date"/>
+                </span>
+                <svg id="datetoggle" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                </svg>
+            </th>
+            <th>
+                <input type="text" id="nurse" placeholder="Nurse" class="filter"></input>
+            </th>
+
+            <th>
+                <input type="text" id="doctor" placeholder="Doctor" class="filter"></input>
+            </th>
 
         </tr>
     </thead>
@@ -77,10 +111,19 @@
 </ul>
 </nav>
 <script>
+    var currentPage = 1;
     document.addEventListener("DOMContentLoaded", function () {
-
-        let currentPage = 1;
+        
+       
         const pageSize = 10;
+        var sliderInputs = document.querySelectorAll(".range-input input");
+        var values = document.querySelectorAll("#slidertrack span");
+        var progress = document.querySelector("#slidertrack .progress");
+        var min, max;
+        var dates = document.querySelectorAll(".date");
+
+        document.getElementById('end').valueAsDate = new Date();
+
         loadPage(currentPage);
         document.getElementById('nextPage').addEventListener('click', function () {
             currentPage++;
@@ -122,6 +165,88 @@
             }
             loadPage(currentPage);
         });
+
+        document.getElementById('patientfirst').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+
+        document.getElementById('patientlast').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+
+        document.getElementById('doctor').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+        document.getElementById('nurse').addEventListener('keypress', function (e) {
+            if (e.key === "Enter") {
+                loadPage(currentPage);
+            }
+        });
+        
+        dates.forEach(date => {
+            date.addEventListener("input", function () {
+                console.log(1)
+                loadPage(currentPage);
+            });
+        });
+
+        document.getElementById('toggle').addEventListener('click', function () {
+            if (document.getElementById('slider').style.display === 'none') {
+                document.getElementById('slider').style.display = 'inline-block'
+                document.getElementById('toggle').style.transform = 'rotate(45deg)';
+                document.querySelector(this.parentElement.nodeName + " span").style.display = 'none';
+            }
+            else {
+                document.getElementById('slider').style.display = 'none';
+                document.getElementById('toggle').style.transform = '';
+                document.querySelector(this.parentElement.nodeName + " span").style.display = 'inline';
+            }
+        });
+
+        document.getElementById('datetoggle').addEventListener('click', function () {
+            let header = document.querySelectorAll(this.parentElement.nodeName + " span")[3];
+            if (document.getElementById('datepicker').style.display === 'none') {
+                document.getElementById('datepicker').style.display = 'inline-block'
+                document.getElementById('datetoggle').style.transform = 'rotate(45deg)';
+                header.style.display = 'none';
+            }
+            else {
+                document.getElementById('datepicker').style.display = 'none';
+                document.getElementById('datetoggle').style.transform = '';
+                header.style.display = 'inline';
+            }
+        });
+
+        sliderInputs.forEach(input => {
+            input.addEventListener("input", function () {
+                if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)) {
+                    min = sliderInputs[1];
+                    max = sliderInputs[0];
+                }
+                else {
+                    min = sliderInputs[0];
+                    max = sliderInputs[1];
+                }
+                progress.style.left = (parseInt(min.value) / min.max) * 100 + "%";
+                progress.style.right = 100 - (parseInt(max.value) / min.max) * 100 + "%";
+
+
+                values[0].innerHTML = sliderInputs[0].value/1000 + "K"
+                values[1].innerHTML = sliderInputs[1].value/1000 + "K"
+                values[0].style.left = (parseInt(sliderInputs[0].value) / sliderInputs[0].max) * 100 - 6 + "%";
+                values[1].style.right = 100 - (parseInt(sliderInputs[1].value) / sliderInputs[0].max) * 100 - 6 + "%";
+            })
+            input.addEventListener("mouseup", function () {
+                console.log(currentPage);
+                loadPage(currentPage);
+            })
+        });
     });
 
     function loadPage(pageIndex) {
@@ -130,19 +255,58 @@
         //Get patientId from query string
         const searchParams = new URLSearchParams(window.location.search);
         var patientId = searchParams.get('patientId');
+
+        var sliderInputs = document.querySelectorAll(".range-input input");
         var url = `/medicalTransactions/GetMedicalTransactions?pageIndex=${pageIndex}&pageSize=10`;
+
         if (patientId) {
             url += '&patientId=' + patientId;
         }
 
+        if (parseInt(sliderInputs[0].value) > parseInt(sliderInputs[1].value)) {
+            var max = sliderInputs[0].value;
+            var min = sliderInputs[1].value;
+        }
+        else {
+            var max = sliderInputs[1].value;
+            var min = sliderInputs[0].value;
+        }
+        url +=
+            '&firstname=' + document.getElementById('patientfirst').value +
+            '&lastname=' + document.getElementById('patientlast').value +
+            '&max=' + max +
+            '&min=' + min +
+            '&nurse=' + document.getElementById('nurse').value +
+            '&doctor=' + document.getElementById('doctor').value +
+            '&start=' + document.getElementById('start').value +
+            '&end=' + document.getElementById('end').value;
+        
+        console.log(url)
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                populateTable(data, patientId);
-                updatePagingControls(pageIndex, data.totalRecords);
+
+                if (Math.ceil(data.totalRecords / 10) == 0) {
+                    document.getElementById('patientName').innerHTML = 'NO RECORDS'
+                    document.getElementById('medicalTransactionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
+                    pageIndex = 0;
+                    updatePagingControls(pageIndex, data.totalRecords);
+                }
+                else if (pageIndex > Math.ceil(data.totalRecords / 10)) {
+                    currentPage = Math.ceil(data.totalRecords / 10);
+                    console.log(currentPage)
+                    loadPage(currentPage);
+
+
+                }
+                else {
+                    populateTable(data, patientId);
+                    updatePagingControls(pageIndex, data.totalRecords);
+                }
                 //document.getElementById('spinner').style.display = 'none';
             })
             .catch(error => console.error('Unable to get medical transactions data.', error));
+    
     }
     function updatePagingControls(currentPage, totalCount) {
         const pageSize = 10;
@@ -153,6 +317,8 @@
 
         document.getElementById('prevPage').disabled = currentPage <= 1;
         document.getElementById('nextPage').disabled = currentPage >= totalPages;
+        document.getElementById('firstPage').disabled = currentPage <= 1;
+        document.getElementById('lastPage').disabled = currentPage >= totalPages;
     }
 
     function populateTable(data, patientId) {
