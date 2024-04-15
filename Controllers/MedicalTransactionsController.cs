@@ -35,6 +35,8 @@ namespace OAinternship.Controllers
                 medicalTransactionsQuery = medicalTransactionsQuery.Where(x => x.PatientId == patientId);
             }
 
+            // in line below there as no handling of empty values in filter. 
+            // You need to check whether filter variable is not empty befor applying it as a filter
             medicalTransactionsQuery = medicalTransactionsQuery.Where(x => (x.PatientFirstName.Contains(firstname) && x.PatientLastName.Contains(lastname) && (x.NurseFirstName + x.NurseLastName).Contains(nurse) && (x.DoctorFirstName + x.DoctorLastName).Contains(doctor)&&(x.TotalCost.Value >= min && x.TotalCost <= max)&&(x.TransactionDate>=startDate && x.TransactionDate<=endDate)));
 
             var totalRecords = medicalTransactionsQuery.Count();
