@@ -160,6 +160,11 @@
             })
         });
 
+        // Similar functionality that you have on each page it is better to move into separate file not to dublicate code on each page. 
+        // JS for paging should be moved into separate js file and referenced on each page. 
+        // HTML code can be also moved into a partial view. 
+        // this is ecxample of article that explains partial Views: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/partial?view=aspnetcore-8.0
+
         //paging functionality
         document.getElementById('nextPage').addEventListener('click', function () {
             currentPage++;
@@ -307,6 +312,7 @@
         });
     }
 
+    // this function can be moved into separate script that manages paging for your application.
     //update page in accordance to the query made
     function updatePagingControls(currentPage, totalCount) {
         const pageSize = 10;
