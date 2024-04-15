@@ -30,6 +30,8 @@ namespace OAinternship.Controllers
                 hospitalName = _context.Hospitals.FirstOrDefault(x => x.Id == hospitalId.Value).HospitalName;
             }
 
+            // Code below would not work if address variable is empty or patient name filter variable is empty.  
+            // try next :  (string.IsNullOrEmpty(address) || p.PatientAddress.Contains(address)) and same with patient name.In this case if address is empty then nothis will be removed from the list of patients
             patientsQuery = patientsQuery.Where(p => (p.FirstName + p.LastName).Contains(name) && p.PatientAddress.Contains(address) && p.HospitalName.Contains(hospital) && (p.Age.Value >= min && p.Age<=max));
 
             var totalRecords = patientsQuery.Count();
