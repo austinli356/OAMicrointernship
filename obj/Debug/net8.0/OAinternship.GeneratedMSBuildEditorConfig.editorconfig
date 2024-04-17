@@ -34,8 +34,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNhbFRyYW5zYWN0aW9uc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/itzyo/source/repos/OAinternship/OAinternship/Views/MedicalTransactions/MedicalTransactionsEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNhbFRyYW5zYWN0aW9uc1xNZWRpY2FsVHJhbnNhY3Rpb25zRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/itzyo/source/repos/OAinternship/OAinternship/Views/Patients/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/itzyo/source/repos/OAinternship/OAinternship/Views/Patients/PatientAdd.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudHNcUGF0aWVudEFkZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/itzyo/source/repos/OAinternship/OAinternship/Views/Patients/PatientEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudHNcUGF0aWVudEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/itzyo/source/repos/OAinternship/OAinternship/Views/Shared/Error.cshtml]

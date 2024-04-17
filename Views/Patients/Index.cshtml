@@ -5,6 +5,7 @@
 
 }
 <h3 id="hospitalName"></h3>
+<a class="btn btn-primary" href="/Patients/Add" role="button">Add Patient</a>
 <table id="patientsTable" class="table table-striped">
     <thead>
         <tr>
@@ -41,6 +42,8 @@
             <th>
                 Transaction Count
             </th>
+
+            <th></th>
 
         </tr>
     </thead>
@@ -297,6 +300,7 @@
             let cell3 = row.insertCell(2);
             let cell4 = row.insertCell(3);
             let cell5 = row.insertCell(4);
+            let cell6 = row.insertCell(5);
 
 
             cell1.innerHTML = patient.firstName + ' ' + patient.lastName;
@@ -304,6 +308,7 @@
             cell3.innerHTML = patient.patientAddress;
             cell4.innerHTML = patient.hospitalName;
             cell5.innerHTML = '<a href="/MedicalTransactions/Index' + '?patientId=' + patient.id + '">' + patient.transactionCount + '</a>';
+            cell6.innerHTML = '<a href="/Patients/Edit/' + patient.id + '"> Edit </a>';
         });
     }
 

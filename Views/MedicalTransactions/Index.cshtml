@@ -54,7 +54,7 @@
             <th>
                 <input type="text" id="doctor" placeholder="Doctor" class="filter"></input>
             </th>
-
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -361,6 +361,7 @@
             let cell4 = row.insertCell(3);
             let cell5 = row.insertCell(4);
             let cell6 = row.insertCell(5);
+            let cell7 = row.insertCell(6);
 
 
             cell1.innerHTML = mt.patientFirstName;
@@ -369,5 +370,6 @@
             cell4.innerHTML = mt.transactionDate;
             cell5.innerHTML = (mt.nurseFirstName + ' ' + mt.nurseLastName);
             cell6.innerHTML = (mt.doctorFirstName + ' ' + mt.doctorLastName);
+            cell7.innerHTML = '<a href="/MedicalTransactions/Edit/' + mt.rxNumber + '"> Edit </a>';
         });
     }</script>

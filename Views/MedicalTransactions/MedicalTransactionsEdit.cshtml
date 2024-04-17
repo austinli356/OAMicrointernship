@@ -1,0 +1,26 @@
+﻿@model OAinternship.Models.MedicalTransaction
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<a class="btn btn-primary" href="/Patients/Index" role="button">Back</a>
+<form asp-action="Edit">
+    <div class="form-group">
+        <label for="PatientId">Patient</label>
+        <select class="form-control" asp-for="PatientId" asp-items="@ViewBag.Patients" id="PatientId" name="PatientId">
+            <option value="">Please select a Patient</option>
+        </select>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="totalCost">Total Cost</label>
+        <input type="number" class="form-control" asp-for="TotalCost" id="totalCost" name="totalCost" placeholder="Enter the total cost" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="transactionDate">Age</label>
+        <input type="date" class="form-control" asp-for="DateFilled" id="transactionDate" name="transactionDate" required>
+    </div>
+    </br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

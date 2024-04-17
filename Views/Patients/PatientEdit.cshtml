@@ -1,0 +1,36 @@
+﻿@model OAinternship.Models.Patient
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<a class="btn btn-primary" href="/Patients/Index" role="button">Back</a>
+<form asp-action="Edit">
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" asp-for="FirstName" id="firstName" name="firstName" placeholder="Enter first name" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" asp-for="LastName" id="lastName" name="lastName" placeholder="Enter last name" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="patientAddress">Address</label>
+        <input type="text" class="form-control" asp-for="PatientAddress" id="patientAddress" name="patientAddress" placeholder="Enter your address" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="patientAge">Age</label>
+        <input type="number" class="form-control" asp-for="Age" id="age" name="age" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="hospital">Hospital</label>
+        <select class="form-control" asp-for="HospitalId" asp-items="@ViewBag.Hospitals" id="hospital" name="HospitalId">
+            <option value="">Please select a hospital</option>
+        </select>
+    </div>
+    </br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
