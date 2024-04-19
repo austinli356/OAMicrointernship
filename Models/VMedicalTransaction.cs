@@ -5,6 +5,8 @@ namespace OAinternship.Models;
 
 public partial class VMedicalTransaction
 {
+    public int RxNumber { get; set; }
+
     public string? PatientFirstName { get; set; }
 
     public string? PatientLastName { get; set; }

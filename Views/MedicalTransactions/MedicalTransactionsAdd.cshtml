@@ -1,0 +1,67 @@
+﻿@model OAinternship.Models.MedicalTransaction
+
+@{
+    ViewData["Title"] = "Add";
+}
+<a class="btn btn-primary" href="/MedicalTransactions/Index" role="button">Back</a>
+<form asp-action="Add">
+    <div class="form-group">
+        <label for="dateFilled">Date Filled</label>
+        <input type="date" class="form-control" asp-for="DateFilled" id="dateFilled" name="dateFilled" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="ndc">NDC</label>
+        <input type="text" class="form-control" asp-for="Ndc" id="ndc" name="ndc" placeholder="Enter a valid NDC" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="daysSupply">Days Supply</label>
+        <input type="number" class="form-control" asp-for="DaysSupply" id="daysSupply" name="daysSupply" placeholder="Enter the days supply" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="patientId">Patient</label>
+        <select class="form-control" asp-for="PatientId" asp-items="@ViewBag.Patients" id="patientId" name="patientId">
+            <option value="">Please select a Patient</option>
+        </select>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="totalCost">Total Cost</label>
+        <input type="number" class="form-control" asp-for="TotalCost" id="totalCost" name="totalCost" step=".01" placeholder="Enter the total cost" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="transactionFee">Transaction Fee</label>
+        <input type="number" class="form-control" asp-for="TransactionFee" id="transactionFee" name="transactionFee" step=".01" placeholder="Enter the transaction fee" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="copayAmount">Copay</label>
+        <input type="number" class="form-control" asp-for="CopayAmount" id="copayAmount" name="copayAmount" step=".01" placeholder="Enter the copay amount" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="payerName">Payer</label>
+        <input type="text" class="form-control" asp-for="PayerName" id="payerName" name="payerName" placeholder="Enter the payer's name'" required>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="nurseId">Nurse</label>
+        <select class="form-control" asp-for="NurseId" asp-items="@ViewBag.Nurses" id="nurseId" name="nurseId">
+            <option value="">Please select the nurse</option>
+        </select>
+    </div>
+    </br>
+    <div class="form-group">
+        <label for="doctorId">Doctor</label>
+        <select class="form-control" asp-for="DoctorId" asp-items="@ViewBag.Nurses" id="doctorId" name="doctorId">
+            <option value="">Please select the doctor</option>
+        </select>
+    </div>
+    </br>
+
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

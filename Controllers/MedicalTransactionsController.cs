@@ -7,7 +7,17 @@ using System.Net;
 
 
 namespace OAinternship.Controllers
-{
+{   
+    public class EditMT
+    {
+        public int Id { get; set; }
+        public MedicalTransaction met { get; set; }
+        public EditMT(int id, MedicalTransaction met)
+        {
+            Id = id;
+            this.met = met;
+        }
+    }
     public class MedicalTransactionsController : Controller
     {
         private readonly MytestserverContext _context;
@@ -23,7 +33,7 @@ namespace OAinternship.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<VMedicalTransaction>> GetMedicalTransactions(int pageIndex = 0, int pageSize = 10, int? patientId = null, string firstname = "", string lastname = "", int max = 100000, int min = 0, string nurse = "", string doctor = "", string start = "2000-01-01", string end = "3000-01-01")
         {
-            
+
             DateOnly startDate = DateOnly.ParseExact(start, "yyyy-MM-dd"); //convert string to DateOnly
             DateOnly endDate = DateOnly.ParseExact(end, "yyyy-MM-dd");
             var patientName = "";
@@ -40,12 +50,12 @@ namespace OAinternship.Controllers
             //Query with passed parameters
             medicalTransactionsQuery = medicalTransactionsQuery.Where
                 (
-                x => (x.PatientFirstName.Contains(firstname) && 
-                x.PatientLastName.Contains(lastname) && 
-                (x.NurseFirstName + x.NurseLastName).Contains(nurse) && 
-                (x.DoctorFirstName + x.DoctorLastName).Contains(doctor)&&
-                (x.TotalCost.Value >= min && x.TotalCost <= max)&&
-                (x.TransactionDate>=startDate && x.TransactionDate<=endDate))
+                x => (x.PatientFirstName.Contains(firstname) &&
+                x.PatientLastName.Contains(lastname) &&
+                (x.NurseFirstName + x.NurseLastName).Contains(nurse) &&
+                (x.DoctorFirstName + x.DoctorLastName).Contains(doctor) &&
+                (x.TotalCost.Value >= min && x.TotalCost <= max) &&
+                (x.TransactionDate >= startDate && x.TransactionDate <= endDate))
                 );
 
             var totalRecords = medicalTransactionsQuery.Count();
@@ -66,7 +76,7 @@ namespace OAinternship.Controllers
             return Ok(response);
         }
 
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
             if (id == null)
             {
@@ -87,29 +97,59 @@ namespace OAinternship.Controllers
 
             ViewBag.Patients = new SelectList(patients, "Id", "FirstName");
 
-            return View("MedicaLTransactionsEdit", mt);
+            return View("MedicalTransactionsEdit", mt);
         }
+        
         [HttpPost]
-        public async Task<IActionResult> Edit(MedicalTransaction mt)
+        public async Task<IActionResult> Edit(MedicalTransaction mt, int id)
         {
             var patients = _context.Patients.Select(p => new
             {
                 p.Id,
-                p.FirstName,
-                p.LastName
+                p.FirstName
             }).ToList();
 
             ViewBag.Patients = new SelectList(patients, "Id", "FirstName");
 
-            if (mt.RxNumber == null)
+            if (mt.DateFilled == null)
             {
                 return NotFound();
             }
-            var dbMedicalTransaction = _context.MedicalTransactions.Find(mt.RxNumber);
+            var dbMedicalTransaction = _context.MedicalTransactions.Find(id);
             dbMedicalTransaction.PatientId = mt.PatientId;
             dbMedicalTransaction.TotalCost = mt.TotalCost;
             dbMedicalTransaction.DateFilled = mt.DateFilled;
             _context.Update(dbMedicalTransaction);
+            _context.SaveChanges();
+            return View("MedicalTransactionsEdit", mt);
+        }
+
+        public IActionResult Add()
+        {
+            var patients = _context.Patients.Select(p => new
+            {
+                p.Id,
+                p.FirstName
+            }).ToList();
+
+            ViewBag.Patients = new SelectList(patients, "Id", "FirstName");
+
+            var nurses = _context.MedicalCaregivers.Select(n => new
+            {
+                n.CaregiverId,
+                n.FirstName
+            }).ToList();
+
+            ViewBag.Nurses = new SelectList(nurses, "CaregiverId", "FirstName");
+
+            return View("MedicalTransactionsAdd");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(MedicalTransaction mt)
+        {
+            mt.RxNumber = _context.MedicalTransactions.Count();
+            _context.MedicalTransactions.Add(mt);
             _context.SaveChanges();
             return View("MedicalTransactionsEdit", mt);
         }
